@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atrapa los corazones 💗</title>
+
+  <style>
+    /* ---------- ESTILOS ---------- */
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;                 /* que no aparezca barra de scroll */
+      background: linear-gradient(#dd9add, #8d1094);
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      user-select: none;
+    }
+
+    #marcador {
+      font-size: 22px;
+      padding: 15px;
+    }
+
+    /* Cada corazón que cae */
+    .corazon {
+      position: absolute;
+      top: -50px;
+      font-size: 40px;
+      cursor: pointer;
+      animation: caer 4s linear;        /* tarda 4 segundos en caer */
+    }
+
+    /* La animación: de arriba hacia abajo de la pantalla */
+    @keyframes caer {
+      from { top: -50px; }
+      to   { top: 100vh; }
+    }
+
+    /* El mensaje final, escondido al inicio */
+    #mensaje {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 350px;
+      padding: 25px;
+      background: white;
+      color: #f7c4d8;
+      border-radius: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="marcador">Atrapa 10 corazones: 0 / 10</div>
+
+  <div id="mensaje">
+    <p>💗 Los atrapaste todos tiiiii 💗</p>
+    <p>Igual que hiciste con el mío p ,TE AMOOO.</p>
+    <p>— TU CUCHURRUMI</p>
+  </div>
+
+
+  <script>
+    // ---------- 1. VARIABLES ----------
+    let puntos = 0;          // cuántos corazones lleva atrapados
+    const meta = 10;         // cuántos necesita para ganar
+
+
+    // ---------- 2. CREAR UN CORAZÓN QUE CAE ----------
+    function crearCorazon() {
+      const corazon = document.createElement("span");
+      corazon.textContent = "💗";
+      corazon.className = "corazon";
+
+      // Posición horizontal al azar (entre 5% y 90% del ancho)
+      corazon.style.left = (5 + Math.random() * 85) + "%";
+
+      // Si ella lo toca: suma un punto y el corazón desaparece
+      corazon.onclick = function () {
+        puntos = puntos + 1;
+        corazon.remove();
+        actualizarMarcador();
+      };
+
+      // Si llega al suelo sin que lo toque, también desaparece
+      corazon.addEventListener("animationend", function () {
+        corazon.remove();
+      });
+
+      document.body.appendChild(corazon);
+    }
+
+
+    // ---------- 3. ACTUALIZAR EL MARCADOR ----------
+    function actualizarMarcador() {
+      document.getElementById("marcador").textContent =
+        "Atrapa 10 corazones: " + puntos + " / " + meta;
+
+      // ¿Ya ganó?
+      if (puntos >= meta) {
+        clearInterval(lluvia);                                   // dejan de caer corazones
+        document.getElementById("mensaje").style.display = "block";  // aparece el mensaje
+      }
+    }
+
+
+    // ---------- 4. EMPEZAR: un corazón nuevo cada 0.7 segundos ----------
+    const lluvia = setInterval(crearCorazon, 700);
+  </script>
+
+</body>
+</html>
